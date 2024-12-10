@@ -1,0 +1,41 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Blog>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+<section class="py-5">
+	<div class="container px-5 my-5">
+		<div class="text-center mb-5">
+			<h1 class="fw-bolder">Our Work</h1>
+			<p class="lead fw-normal text-muted mb-0">Company portfolio</p>
+		</div>
+		@{
+			var selection = Umbraco.Content(Guid.Parse("ab6a1e42-666e-4ff0-ab2d-03a7a18297c7"))
+			.ChildrenOfType("blogItem")
+			.Where(x => x.IsVisible())
+			.OrderByDescending(x => x.CreateDate);
+		}
+		<div class="row gx-5">
+			@foreach (var item in selection)
+			{
+				var photo = item.Value<IPublishedContent>("imgbg")?.Url() ?? "";
+				<div class="col-lg-6">
+					<div class="position-relative">
+						<img class="img-fluid rounded-3 mb-3" src="@photo" alt="@item.Name()" />
+						<a class="h3 fw-bolder text-decoration-none link-dark stretched-link"
+							href="@item.Url()">@item.Name()</a>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</section>
+
+<section class="py-5 bg-light">
+	<div class="container px-5 my-5">
+		<h2 class="display-4 fw-bolder mb-4">Let's build something together</h2>
+		<a class="btn btn-lg btn-primary" href="#!">Contact us</a>
+	</div>
+</section>
